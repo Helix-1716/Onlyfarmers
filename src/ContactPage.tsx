@@ -1,6 +1,6 @@
 import './ContactPage.css';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from './context/AuthContext';
 import { sendMessageToThread, addNotification, ensureConversationWith } from './services/chat';
 import { useNavigate } from 'react-router-dom';
@@ -165,7 +165,7 @@ export default function ContactPage() {
             <div>
               <div className="text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Photos</div>
               <div className="grid grid-cols-3 gap-2">
-                {listing.photos.map((src, i) => (
+                {listing.photos.map((src: string, i: number) => (
                   <img key={i} src={src} alt={`Land ${i+1}`} className="w-full h-20 object-cover rounded-lg border border-green-100 dark:border-gray-700" />
                 ))}
               </div>
@@ -173,7 +173,7 @@ export default function ContactPage() {
             <div>
               <div className="text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Family</div>
               <ul className="list-disc ml-5 text-gray-700 dark:text-gray-200">
-                {listing.owner.family.map((m, i) => (
+                {listing.owner.family.map((m: { relation: string; name: string }, i: number) => (
                   <li key={i}><span className="font-semibold">{m.relation}:</span> {m.name}</li>
                 ))}
               </ul>

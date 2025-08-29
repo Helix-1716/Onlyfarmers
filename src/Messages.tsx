@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useAuth } from './context/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { db } from './firebase';
-import { collection, doc, onSnapshot, orderBy, query, addDoc, serverTimestamp, where } from 'firebase/firestore';
-import { conversationIdFor, ensureConversationWith, sendConversationMessage } from './services/chat';
+import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestore';
+import type { DocumentData, QuerySnapshot } from 'firebase/firestore';
+import { sendConversationMessage } from './services/chat';
 
 type Thread = { id: string; name: string; avatar: string; last: string; updatedAt: number };
 type Message = { id: string; text: string; sender: 'me' | 'peer'; createdAt: number };
@@ -25,7 +26,13 @@ export default function MessagesPage() {
     const q = query(collection(db, 'conversations'), where('participants', 'array-contains', user.uid), orderBy('updatedAt', 'desc'));
     const unsub = onSnapshot(q, (snap) => {
       const next: Thread[] = snap.docs.map(d => {
-        const v = d.data() as any;
+        const v = d.data() as {
+          participants: string[];
+          participantNames: Record<string, string>;
+          participantAvatars: Record<string, string>;
+          lastMessage: string;
+          updatedAt: { toMillis: () => number } | number;
+        };
         // Derive peer name/avatar
         const peerId = (v.participants || []).find((p: string) => p !== user.uid);
         const name = v.participantNames?.[peerId] || 'Chat';
@@ -36,7 +43,7 @@ export default function MessagesPage() {
       if (!activeId && next.length) setActiveId(next[0].id);
     });
     return () => unsub();
-  }, [user]);
+  }, [user, activeId]);
 
   useEffect(() => {
     if (!user || !activeId) return;
