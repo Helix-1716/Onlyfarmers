@@ -4,6 +4,7 @@ import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } 
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
+// Firebase configuration with environment variables
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -14,15 +15,42 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
+// Check if we have all required Firebase config
+const hasValidConfig = firebaseConfig.apiKey &&
+                      firebaseConfig.authDomain &&
+                      firebaseConfig.projectId;
+
+if (!hasValidConfig) {
+  console.error('Firebase configuration is incomplete. Please check your environment variables.');
+  console.log('Missing environment variables:');
+  if (!firebaseConfig.apiKey) console.log('- VITE_FIREBASE_API_KEY');
+  if (!firebaseConfig.authDomain) console.log('- VITE_FIREBASE_AUTH_DOMAIN');
+  if (!firebaseConfig.projectId) console.log('- VITE_FIREBASE_PROJECT_ID');
+  if (!firebaseConfig.storageBucket) console.log('- VITE_FIREBASE_STORAGE_BUCKET');
+  if (!firebaseConfig.messagingSenderId) console.log('- VITE_FIREBASE_MESSAGING_SENDER_ID');
+  if (!firebaseConfig.appId) console.log('- VITE_FIREBASE_APP_ID');
+  if (!firebaseConfig.measurementId) console.log('- VITE_FIREBASE_MEASUREMENT_ID');
+}
+
+// Initialize Firebase (will throw if config is invalid)
 const app = initializeApp(firebaseConfig);
-try { getAnalytics(app); } catch {/* ignore analytics errors */}
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
 
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+// Try to initialize analytics (optional)
+try {
+  getAnalytics(app);
+} catch (analyticsError) {
+  console.warn('Analytics initialization failed:', analyticsError);
+}
 
-// Persist session across reloads (localStorage)
-setPersistence(auth, browserLocalPersistence).catch(() => {});
+// Set persistence
+setPersistence(auth, browserLocalPersistence).catch((error) => {
+  console.warn('Auth persistence setup failed:', error);
+});
+
+export { auth, db, storage, googleProvider };
 
 
