@@ -1,0 +1,99 @@
+[
+  {
+    "title": "Record Land Sales in Punjab",
+    "summary": "Farmers in Punjab report a surge in agricultural land sales this season.",
+    "link": "https://www.thehindu.com/business/Industry/punjab-agri-land-sales-surge/article12345678.ece",
+    "category": "Land",
+    "timestamp": "2025-08-26T08:30:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Livestock Prices Rise in Maharashtra",
+    "summary": "Buffalo and cattle prices have increased by 15% due to high demand.",
+    "link": "https://www.financialexpress.com/economy/livestock-prices-maharashtra-rise/",
+    "category": "Livestock",
+    "timestamp": "2025-08-26T06:10:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Government Launches New Subsidy",
+    "summary": "New subsidies announced for organic farming and livestock rearing.",
+    "link": "https://agricoop.gov.in/",
+    "category": "Policy",
+    "timestamp": "2025-08-25T18:00:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Drought Affects Crop Yields",
+    "summary": "Several regions face reduced yields due to prolonged dry spells.",
+    "link": "https://www.downtoearth.org.in/news/agriculture/drought-impacts-crop-yields-12345",
+    "category": "Climate",
+    "timestamp": "2025-08-24T10:20:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Wheat Export Ban Lifted",
+    "summary": "The government has lifted the ban on wheat exports, boosting farmer profits.",
+    "link": "https://www.livemint.com/economy/government-lifts-wheat-export-ban-11678901234567.html",
+    "category": "Policy",
+    "timestamp": "2025-08-23T14:00:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "New Irrigation Technology Adopted",
+    "summary": "Farmers in Gujarat are adopting drip irrigation to conserve water.",
+    "link": "https://www.thebetterindia.com/irrigation-innovation/",
+    "category": "Tech",
+    "timestamp": "2025-08-22T09:45:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Organic Produce Demand Surges",
+    "summary": "Urban markets see a 25% rise in demand for organic fruits and vegetables.",
+    "link": "https://www.business-standard.com/markets/organic-demand-surges-12345",
+    "category": "Market",
+    "timestamp": "2025-08-21T12:30:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Pest Outbreak in Rice Fields",
+    "summary": "Rice farmers in West Bengal battle a new pest outbreak affecting crops.",
+    "link": "https://www.indianexpress.com/article/cities/kolkata/pest-outbreak-rice-fields-west-bengal-1234567/",
+    "category": "Alert",
+    "timestamp": "2025-08-20T08:15:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Solar Pumps Subsidy Announced",
+    "summary": "New solar pump subsidies to help farmers reduce energy costs.",
+    "link": "https://mnre.gov.in/",
+    "category": "Energy",
+    "timestamp": "2025-08-19T07:00:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Farmers Protest New Tax Policy",
+    "summary": "Thousands of farmers protest against proposed agricultural tax reforms.",
+    "link": "https://www.ndtv.com/india-news/farmers-protest-tax-policy-1234567",
+    "category": "Policy",
+    "timestamp": "2025-08-18T16:25:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Record Tomato Harvest in Karnataka",
+    "summary": "Karnataka farmers celebrate a record-breaking tomato harvest this year.",
+    "link": "https://www.deccanherald.com/state/top-karnataka-stories/record-tomato-harvest-1234567.html",
+    "category": "Crops",
+    "timestamp": "2025-08-17T13:40:00.000Z",
+    "image": "/leaf-regular-48.png"
+  },
+  {
+    "title": "Mobile App for Crop Insurance Launched",
+    "summary": "A new mobile app makes crop insurance claims easier for rural farmers.",
+    "link": "https://pmfby.gov.in/",
+    "category": "Tech",
+    "timestamp": "2025-08-16T11:00:00.000Z",
+    "image": "/leaf-regular-48.png"
+  }
+]
+
