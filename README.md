@@ -1,6 +1,8 @@
-# React + TypeScript + Vite
+# Onlyfarmers
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+It is a website for Farmers and auction purposes, built with React + TypeScript + Vite.
+
+This project provides a platform for farmers to auction and sell their products.
 
 Currently, two official plugins are available:
 
@@ -67,3 +69,7 @@ export default tseslint.config([
   },
 ])
 ```
+=======
+# Onlyfarmers
+It is  website for Farmers and auction purposes
+>>>>>>> 6e058adf402edaa0172ccd267162890256aacabf
