@@ -42,10 +42,33 @@ type ChatMessage = {
   time: number;
 };
 
+type Listing = {
+  id: number;
+  type: string;
+  title: string;
+  price: number;
+  location: string;
+  description: string;
+  contact: string;
+  owner: {
+    name: string;
+    avatar: string;
+    email: string;
+    address: string;
+    family: Array<{ relation: string; name: string }>;
+  };
+  photos: string[];
+  image?: string;
+};
+
+type LocationState = {
+  listing?: Partial<Listing>;
+};
+
 export default function ContactPage() {
   const { id } = useParams();
   const location = useLocation();
-  const routedListing = (location.state as any)?.listing as any | undefined;
+  const routedListing = (location.state as LocationState)?.listing;
 
   // Normalize incoming routed listing to include owner/photos so chat page is rich for all cards
   const normalizedFromRoute = React.useMemo(() => {

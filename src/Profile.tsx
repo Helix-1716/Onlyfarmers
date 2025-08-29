@@ -110,7 +110,7 @@ export default function ProfilePage() {
                 if (!newAvatarUrl) return;
                 setIsSavingAvatar(true);
                 setProfile(p => ({ ...p, avatar: newAvatarUrl }));
-                try { localStorage.setItem('of_profile', JSON.stringify({ ...profile, avatar: newAvatarUrl })); } catch {}
+                try { localStorage.setItem('of_profile', JSON.stringify({ ...profile, avatar: newAvatarUrl })); } catch {/* ignore localStorage errors */}
                 setTimeout(() => setIsSavingAvatar(false), 200);
               }}
             >

@@ -1,6 +1,6 @@
 import { db } from '../firebase';
 import { auth } from '../firebase';
-import { serverTimestamp, setDoc, doc, updateDoc, increment, collection, addDoc, writeBatch, getDocs, query, where, getDocs as getDocsOnce, orderBy } from 'firebase/firestore';
+import { serverTimestamp, setDoc, doc, updateDoc, increment, collection, addDoc, writeBatch, getDocs } from 'firebase/firestore';
 
 export type ThreadMeta = {
   peerName?: string;

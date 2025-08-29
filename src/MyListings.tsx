@@ -8,11 +8,25 @@ import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverT
 
 type MsgPreview = { id: string; name: string; avatar: string; last: string; time: number; unread: number; listingId?: number };
 
+type Listing = {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  location: string;
+  description: string;
+  image: string;
+  ownerId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  scope?: 'user' | 'global';
+};
+
 export default function MyListingsPage() {
   const { user } = useAuth();
   const [messages, setMessages] = useState<MsgPreview[]>([]);
   const [watchlist, setWatchlist] = useState<Record<string, boolean>>({});
-  const [myListings, setMyListings] = useState<Array<any>>([]);
+  const [myListings, setMyListings] = useState<Listing[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,7 +49,7 @@ export default function MyListingsPage() {
     if (!user) return;
     const userScoped = query(collection(db, 'users', user.uid, 'listings'), orderBy('createdAt', 'desc'));
     const unsubUser = onSnapshot(userScoped, (snap) => {
-      const arr = snap.docs.map(d => ({ id: d.id, ...(d.data() as any), scope: 'user' as const }));
+      const arr = snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Listing, 'id' | 'scope'>), scope: 'user' as const }));
       setMyListings(prev => {
         const globalOnly = prev.filter(x => x.scope === 'global');
         return [...arr, ...globalOnly];
@@ -43,7 +57,7 @@ export default function MyListingsPage() {
     });
     const globalScoped = query(collection(db, 'listings'), where('ownerId', '==', user.uid), orderBy('createdAt', 'desc'));
     const unsubGlobal = onSnapshot(globalScoped, (snap) => {
-      const arr = snap.docs.map(d => ({ id: d.id, ...(d.data() as any), scope: 'global' as const }));
+      const arr = snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Listing, 'id' | 'scope'>), scope: 'global' as const }));
       setMyListings(prev => {
         const userOnly = prev.filter(x => x.scope === 'user');
         return [...userOnly, ...arr];
@@ -72,7 +86,7 @@ export default function MyListingsPage() {
     setBusyId(null);
   };
 
-  const saveListing = async (l: any) => {
+  const saveListing = async (l: Listing) => {
     if (!user) return;
     setBusyId(l.id);
     const patch = { ...l, updatedAt: serverTimestamp() };
@@ -81,7 +95,7 @@ export default function MyListingsPage() {
     setBusyId(null);
   };
 
-  const deleteListing = async (l: any) => {
+  const deleteListing = async (l: Listing) => {
     if (!user) return;
     setBusyId(l.id);
     try { await deleteDoc(doc(db, 'users', user.uid, 'listings', l.id)); } catch {/* ignore */}

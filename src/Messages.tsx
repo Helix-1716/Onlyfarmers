@@ -5,11 +5,12 @@ import { useAuth } from './context/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { db } from './firebase';
 import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestore';
-import type { DocumentData, QuerySnapshot } from 'firebase/firestore';
 import { sendConversationMessage } from './services/chat';
 
 type Thread = { id: string; name: string; avatar: string; last: string; updatedAt: number };
 type Message = { id: string; text: string; sender: 'me' | 'peer'; createdAt: number };
+type MessageData = { text?: string; senderId: string; createdAt?: { toMillis: () => number } | number };
+type LocationState = { conversationId?: string };
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -28,16 +29,17 @@ export default function MessagesPage() {
       const next: Thread[] = snap.docs.map(d => {
         const v = d.data() as {
           participants: string[];
-          participantNames: Record<string, string>;
-          participantAvatars: Record<string, string>;
-          lastMessage: string;
-          updatedAt: { toMillis: () => number } | number;
+          participantNames?: Record<string, string>;
+          participantAvatars?: Record<string, string>;
+          lastMessage?: string;
+          updatedAt?: { toMillis: () => number } | number;
         };
         // Derive peer name/avatar
         const peerId = (v.participants || []).find((p: string) => p !== user.uid);
-        const name = v.participantNames?.[peerId] || 'Chat';
-        const avatar = v.participantAvatars?.[peerId] || 'https://randomuser.me/api/portraits/men/12.jpg';
-        return { id: d.id, name, avatar, last: v.lastMessage || '', updatedAt: (v.updatedAt?.toMillis?.() || v.updatedAt || Date.now()) };
+        const name = peerId && v.participantNames?.[peerId] ? v.participantNames[peerId] : 'Chat';
+        const avatar = peerId && v.participantAvatars?.[peerId] ? v.participantAvatars[peerId] : 'https://randomuser.me/api/portraits/men/12.jpg';
+        const updatedAt = typeof v.updatedAt === 'object' && v.updatedAt?.toMillis ? v.updatedAt.toMillis() : (typeof v.updatedAt === 'number' ? v.updatedAt : Date.now());
+        return { id: d.id, name, avatar, last: v.lastMessage || '', updatedAt };
       });
       setThreads(next);
       if (!activeId && next.length) setActiveId(next[0].id);
@@ -50,8 +52,9 @@ export default function MessagesPage() {
     const msgs = query(collection(db, 'conversations', activeId, 'messages'), orderBy('createdAt', 'asc'));
     const unsub = onSnapshot(msgs, (snap) => {
       const next: Message[] = snap.docs.map(d => {
-        const v = d.data() as any;
-        return { id: d.id, text: v.text || '', sender: (v.senderId === user.uid ? 'me' : 'peer') as 'me' | 'peer', createdAt: (v.createdAt?.toMillis?.() || v.createdAt || Date.now()) };
+        const v = d.data() as MessageData;
+        const createdAt = typeof v.createdAt === 'object' && v.createdAt?.toMillis ? v.createdAt.toMillis() : (typeof v.createdAt === 'number' ? v.createdAt : Date.now());
+        return { id: d.id, text: v.text || '', sender: (v.senderId === user.uid ? 'me' : 'peer') as 'me' | 'peer', createdAt };
       });
       setMessages(next);
     });
@@ -62,9 +65,9 @@ export default function MessagesPage() {
 
   // Accept navigation state to open a specific conversation
   useEffect(() => {
-    const state = location.state as any;
+    const state = location.state as LocationState;
     if (state?.conversationId) {
-      setActiveId(state.conversationId as string);
+      setActiveId(state.conversationId);
     }
   }, [location.state]);
 

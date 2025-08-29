@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -7,6 +7,8 @@ import { doc, onSnapshot } from 'firebase/firestore';
 
 type Category = 'Lands' | 'Houses' | 'Animals';
 type AuctionItem = { id: string; title: string; description: string; image: string; currentBid: number; bidders: number; endTime: number; category: Category };
+type LocationState = { item?: AuctionItem };
+type FirebaseAuctionData = { title: string; description?: string; image?: string; currentBid?: number; bidders?: number; endTime?: number; category?: string };
 
 function useCountdown(target: number) {
   const [remaining, setRemaining] = useState(Math.max(0, target - Date.now()));
@@ -18,21 +20,21 @@ function useCountdown(target: number) {
 export default function AuctionDetailsPage() {
   const { id } = useParams();
   const location = useLocation();
-  const initial = (location.state as any)?.item as AuctionItem | undefined;
+  const initial = (location.state as LocationState)?.item;
   const [item, setItem] = useState<AuctionItem | undefined>(initial);
 
   useEffect(() => {
     if (!id) return;
     const unsub = onSnapshot(doc(db, 'auctions', id), (snap) => {
       if (snap.exists()) {
-        const v = snap.data() as any;
+        const v = snap.data() as FirebaseAuctionData;
         setItem({ id, title: v.title, description: v.description || '', image: v.image || initial?.image || '', currentBid: v.currentBid || 0, bidders: v.bidders || 0, endTime: v.endTime || Date.now(), category: (v.category || 'Lands') as Category });
       }
     });
     return () => unsub();
-  }, [id]);
+  }, [id, initial?.image]);
 
-  const time = useMemo(() => (item ? useCountdown(item.endTime) : ''), [item?.endTime]);
+  const time = useCountdown(item?.endTime || 0);
 
   if (!item) {
     return (

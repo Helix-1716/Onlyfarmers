@@ -22,7 +22,7 @@ export default function SettingsPage() {
       if (ph) setPhone(ph);
       const ad = localStorage.getItem('of_profile_address');
       if (ad) setAddress(ad);
-    } catch {}
+    } catch {/* ignore localStorage errors */}
   }, []);
 
   const save = () => {
@@ -33,7 +33,7 @@ export default function SettingsPage() {
       localStorage.setItem('of_profile_phone', phone);
       localStorage.setItem('of_profile_address', address);
       alert('Settings saved');
-    } catch {}
+    } catch {/* ignore localStorage errors */}
   };
 
   const clearData = () => {
@@ -42,7 +42,7 @@ export default function SettingsPage() {
       localStorage.removeItem('of_messages');
       localStorage.removeItem('of_notifications');
       alert('Local data cleared');
-    } catch {}
+    } catch {/* ignore localStorage errors */}
   };
 
   return (

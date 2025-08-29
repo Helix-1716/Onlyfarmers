@@ -15,7 +15,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-try { getAnalytics(app); } catch {}
+try { getAnalytics(app); } catch {/* ignore analytics errors */}
 
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();

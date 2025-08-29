@@ -47,8 +47,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           nameLower: merged.name.toLowerCase(),
           emailLower: merged.email.toLowerCase(),
           updatedAt: serverTimestamp(),
-        }, { merge: true }).catch(() => {});
-      } catch {}
+        }, { merge: true }).catch(() => {/* ignore firestore errors */});
+      } catch {/* ignore localStorage errors */}
     }
   }, [user]);
 
@@ -64,6 +64,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = (): AuthContextType => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');

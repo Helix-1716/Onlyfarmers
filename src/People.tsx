@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { db } from './firebase';
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { ensureConversationWith } from './services/chat';
 import { useNavigate } from 'react-router-dom';
 
 type PublicUser = { uid: string; name: string; email: string; avatar: string };
+type PublicUserData = { name: string; email: string; avatar: string; nameLower: string };
 
 export default function PeoplePage() {
   const [term, setTerm] = useState('');
@@ -19,7 +20,7 @@ export default function PeoplePage() {
     try {
       const q = query(collection(db, 'users_public'), where('nameLower', '>=', qstr.toLowerCase()), where('nameLower', '<=', qstr.toLowerCase() + '\uf8ff'));
       const snap = await getDocs(q);
-      const arr: PublicUser[] = snap.docs.map(d => ({ uid: d.id, ...(d.data() as any) }));
+      const arr: PublicUser[] = snap.docs.map(d => ({ uid: d.id, ...(d.data() as PublicUserData) }));
       setResults(arr);
     } catch {
       setResults([]);
